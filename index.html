@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <script>
+
+  function loading(){
+    document.getElementById("search").value ="";
+    //GetSpreadsheetの実行→成功すればその結果をdisplayに受け渡す
+    google.script.run.withSuccessHandler(display).GetSpreadsheet("");
+  }
+  window.addEventListener('load', loading);
+
+  //取得したデータを表示する
+  function display(shtTable){
+    var table = '<table border=1>';
+    for(var row = 0; row < shtTable.length; row++){
+      table += '<tr>';
+      for(var col = 0; col < shtTable[row].length; col++){
+        table += '<td>'+ shtTable[row][col] + '</td>';
+      }
+      table += '</tr>';
+    }
+    table = table + '</table>';
+
+    document.getElementById("shtDisp").innerHTML = table;
+  }
+
+  function searchName(){
+    var key = document.getElementById("search").value;
+    console.log(key,"が検索値")
+    google.script.run.withSuccessHandler(display).GetSpreadsheet(key);
+  }
+
+  </script>
+
+  <head>
+    <base target="_top">
+  </head>
+  <body>
+    <input type="text" id = "search">
+    <input type="submit" name="submit" value='名前検索' onclick="searchName();">
+    <input type="submit" name="submit" value='クリア' onclick="loading();">
+
+    <div id='shtDisp'></div>
+  </body>
+</html>
